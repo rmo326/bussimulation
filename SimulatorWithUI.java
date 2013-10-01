@@ -35,7 +35,7 @@ public class SimulatorWithUI extends GUIState{
     public void setupPortrayals(){
         people person = (people) state;
         peoplePortrayal.setField(people.yard);
-        peoplePortrayal.setPortrayalForClass(personsA.class, new sim.portrayal.simple.OvalPortrayal2D(Color.red));
+        peoplePortrayal.setPortrayalForClass(personsA.class, new sim.portrayal.simple.RectanglePortrayal2D(Color.red));
         peoplePortrayal.setPortrayalForClass(busstops.class, new sim.portrayal.simple.OvalPortrayal2D(Color.blue));
         // reschedule the displayer
         display.reset();
