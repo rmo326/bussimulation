@@ -12,10 +12,15 @@ import java.awt.Color;
 import java.awt.*;
 import sim.field.continuous.*;
 import sim.field.network.*;
+import java.lang.Object;
+import java.awt.geom.*;
+//The setup stuff that never changes
 public class SimulatorWithUI extends GUIState{
+
     public Display2D display;
     public JFrame displayFrame;
     ContinuousPortrayal2D peoplePortrayal = new ContinuousPortrayal2D();
+    NetworkPortrayal2D stopsPortrayal = new NetworkPortrayal2D();
     public static void main(String[] args){
         SimulatorWithUI vid = new SimulatorWithUI();
         Console c = new Console(vid);
@@ -32,11 +37,34 @@ public class SimulatorWithUI extends GUIState{
         super.load(state);
         setupPortrayals();
     }
+//If you need to add a portral, here is where you do it
     public void setupPortrayals(){
-        people person = (people) state;
+        people p = (people) state;
         peoplePortrayal.setField(people.yard);
-        peoplePortrayal.setPortrayalForClass(personsA.class, new sim.portrayal.simple.RectanglePortrayal2D(Color.red));
-        peoplePortrayal.setPortrayalForClass(busstops.class, new sim.portrayal.simple.OvalPortrayal2D(Color.blue));
+        
+        //peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(Color.gray,3));
+        
+        peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(3){
+            public void draw (Object object, Graphics2D graphics, DrawInfo2D info){
+                bus ba = (bus)object;
+                paint =ba.getbusColor();
+                super.draw(object, graphics, info);
+            }
+        }
+                );
+        
+        peoplePortrayal.setPortrayalForClass(busstops.class, new sim.portrayal.simple.RectanglePortrayal2D
+        (new Color(50,60,70,100),5));
+        peoplePortrayal.setPortrayalForClass(personsA.class, new OvalPortrayal2D(){
+             public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
+                personsA pa = (personsA)object;        
+                paint = pa.getPersonColor();
+                super.draw(object, graphics, info);
+            }       
+        }
+            );
+        stopsPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D());
+        stopsPortrayal.setField( new SpatialNetwork2D(people.yard, p.Whichstop));
         // reschedule the displayer
         display.reset();
         display.setBackdrop(Color.white);
@@ -53,6 +81,7 @@ public class SimulatorWithUI extends GUIState{
         // so the frame appears in the "Display" list
         displayFrame.setVisible(true);
         display.attach( peoplePortrayal, "Yard" );
+        display.attach (stopsPortrayal, "Buddies");
     }
     public void quit()
     {
@@ -60,5 +89,5 @@ public class SimulatorWithUI extends GUIState{
         if (displayFrame!=null) displayFrame.dispose();
         displayFrame = null;
         display = null;
-    }
 }  
+    }
