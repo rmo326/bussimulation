@@ -17,9 +17,9 @@ public class people extends SimState{
     double randomMultiplier = 0.1;
     public Network Whichstop = new Network(false);
     public Network Buslist = new Network(false);
-    public int numpersons = 25;
+    public int numpersons = 50;
     public int numpersonsB = 12;
-    public int numpersonsC = 25;
+    public int numpersonsC = 50;
     public int numbusstops = 2;
     public int numbus= 1;
     public Bag persons;
@@ -39,7 +39,7 @@ public class people extends SimState{
         //Below is the list of bus stop (and therefore people) colors
         ArrayList<Color> bcolors = new ArrayList<Color>();
         bcolors.add(Color.green);
-        bcolors.add(Color.red);
+        bcolors.add(Color.orange);
         
         //add some bus stops. because of the constructor for bus stops, we can pass colors in
         for(int i = 0; i < numbusstops; i++){        
@@ -67,20 +67,27 @@ public class people extends SimState{
             Object a = persons.get(q);
             int bw = 0; 
             Object b = stops.get(bw);
+            Object bq = stops.get(bw+1);
             busstops bs = (busstops)b;
             personsA pa = (personsA)a;
-            pa.setColor(bs.getColor());
+            pa.setPersonColor(bs.getColor());
+            pa.setWork((busstops)bq);
+            pa.setHome((busstops)b);
             double walktostop = 1;
             Whichstop.addEdge(a, b, new Double(walktostop));
+            
             }
             
          for(int z=12;z<(numpersonsC);z++){ 
             Object f = persons.get(z);
             int bz = 1; 
             Object ba = stops.get(bz);
+            Object bb = stops.get(bz-1);
             busstops bst = (busstops)ba;
             personsA pas= (personsA)f;
-            pas.setColor(bst.getColor());
+            pas.setPersonColor(bst.getColor());
+            pas.setWork((busstops)bb);
+            pas.setHome((busstops)ba);
             double walktostop = 1;
             Whichstop.addEdge(f, ba, new Double(walktostop));
             }

@@ -46,10 +46,12 @@ public class SimulatorWithUI extends GUIState{
         
         peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(3){
             public void draw (Object object, Graphics2D graphics, DrawInfo2D info){
-                bus ba = (bus)object;
+                bus ba = (bus)object;               
+                ba.setbusColor((new Color((ba.getcurrentLoad()), 0, 255 - (ba.getcurrentLoad()))));              
                 paint =ba.getbusColor();
                 super.draw(object, graphics, info);
             }
+            
         }
                 );
         
@@ -83,11 +85,12 @@ public class SimulatorWithUI extends GUIState{
         display.attach( peoplePortrayal, "Yard" );
         display.attach (stopsPortrayal, "Buddies");
     }
-    public void quit()
-    {
+    
+    public void quit(){
         super.quit();
         if (displayFrame!=null) displayFrame.dispose();
         displayFrame = null;
         display = null;
-}  
+        } 
+    
     }

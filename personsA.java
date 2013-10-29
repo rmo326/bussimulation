@@ -13,22 +13,66 @@ public class personsA implements Steppable{
 
     public bus mybus;
     public Color myColor;
+    public Color originalcolor;
     public boolean atStop = false;
+    public busstops myWork;
+    public busstops myHome;
+    public busstops goal;  
+    public personsA() {
+        myColor = Color.blue;
+    }
+    
+    public void setWork (busstops bh) {
+        myWork = bh;
+        goal = myWork;
+    }
+    public busstops getWork () {
+        return myWork;
+    }
+   public void setHome (busstops bh) {
+       myHome = bh;
+   }
+   public busstops getHome () {
+       return myHome;
+   }
+   
     public Color getPersonColor() {
         return myColor;
     }
     
-    public void setColor(Color c) {
+    public void setPersonColor(Color c) {
         myColor = c;
+        originalcolor = c;
     }
-    public personsA() {
-        myColor = Color.blue;
-    }
+   
     public void onBus(bus b) {
         mybus = b;
         if (mybus != null) {
             myColor = Color.blue;
         }
+        else {
+            myColor = originalcolor;
+        }
+    }
+    
+    public void toggleGoal(){
+        if (goal == myWork){
+                goal=myHome;
+            }
+        else{
+            goal= myWork;
+        }
+    }
+    public boolean leave (busstops bst){
+        if (bst == goal){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    public void setStop (boolean d){
+        atStop=d;
     }
     
     public void step(SimState state){
@@ -39,10 +83,10 @@ public class personsA implements Steppable{
         MutableDouble2D sumWill = new MutableDouble2D();
         MutableDouble2D forceVector = new MutableDouble2D();
         Bag out = person.Whichstop.getEdges(this, null);
-        int len = out.size();
+        
         if (mybus == null) {
             //this will define our walking vector, and also check to see if the people are at the bus stop. 
-            for(int buddy = 0 ; buddy < len; buddy++) {
+            for(int buddy = 0 ; buddy < out.size(); buddy++) {
                 Edge e = (Edge)(out.get(buddy));
                 Double2D him = people.yard.getObjectLocation(e.getOtherNode(this));
                 forceVector.setTo((him.x - me.x), (him.y - me.y));   
@@ -57,7 +101,7 @@ public class personsA implements Steppable{
             }
         } else {
                  Double2D him = people.yard.getObjectLocation(mybus);
-                forceVector.setTo((him.x - me.x), (him.y - me.y)); 
+                 forceVector.setTo((him.x - me.x), (him.y - me.y)); 
                  sumWill.addIn(forceVector.normalize());
   
         }
