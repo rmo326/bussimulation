@@ -45,12 +45,12 @@ public class people extends SimState{
         for(int i = 0; i < numbusstops; i++){        
             Double2D x =  new Double2D(people.yard.getWidth()-(i*50)-25,people.yard.getHeight()-(i*50)-25);  
             busstops b = new busstops(bcolors.get(i), x);
-            people.yard.setObjectLocation(b,x);
-            
+            people.yard.setObjectLocation(b,x);           
             schedule.scheduleRepeating(b);
             Buslist.addNode(b);
             }     
         Bag stops = Buslist.getAllNodes();
+        
         //place people
          for(int i = 0; i < numpersons; i++){
             personsA p = new personsA();
@@ -92,17 +92,7 @@ public class people extends SimState{
             Whichstop.addEdge(f, ba, new Double(walktostop));
             }
             
-             /*for(int q=0;q<(numpersonsA);q++){ 
-            Object a = persons.get(q);
-            int bw = random.nextInt(stops.numObjs); 
-            Object b = stops.get(bw);
-            busstops bs = (busstops)b;
-            personsA pa = (personsA)a;
-            pa.setColor(bs.getColor());
-            double walktostop = 1;
-            Whichstop.addEdge(a, b, new Double(walktostop));
-            }*/
-            
+
         //add a bus
          for(int i = 0; i < numbus; i++){            
             bus q = new bus();
@@ -111,7 +101,12 @@ public class people extends SimState{
             people.yard.setObjectLocation(q,
             new Double2D(people.yard.getWidth()-75,people.yard.getHeight()-50));
             schedule.scheduleRepeating(q);
-    }
+        }
+    
+        //add a bus route
+         for (int ib = 0; ib < numbus; ib++){
+             BusRoute br = new BusRoute();
+         }
 }
     
     public static void main(String[] args){

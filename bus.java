@@ -5,6 +5,8 @@ import sim.field.continuous.*;
 import sim.util.*;
 import sim.field.network.*;
 import java.awt.Color;
+
+//import java.io.Route;
 public class bus implements Steppable{
 
     public Color busColor; 
@@ -19,6 +21,8 @@ public class bus implements Steppable{
     public boolean stopbus = false;
     public boolean BusatStop = false;
     public int busInfo;
+ 
+    
     public bus (){
         
         //mylocations.add(new Double2D(25,75));
@@ -67,6 +71,11 @@ public class bus implements Steppable{
     
     
     public void step(SimState state){
+        
+        
+
+
+
         //Should be setting up the yard
         people bus = (people) state; 
         Continuous2D yard = people.yard;
@@ -100,7 +109,7 @@ public class bus implements Steppable{
                         
             busstops bst = (busstops) mylocations.get(current);
 
-            //drops people off
+            //drops people off 
             for(int i =0;i<myriders.size();i++){
                 personsA peop = (personsA)myriders.get(i);
                 if (peop.leave(bst)) {

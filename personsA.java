@@ -85,31 +85,40 @@ public class personsA implements Steppable{
         Bag out = person.Whichstop.getEdges(this, null);
         
         if (mybus == null) {
-            //this will define our walking vector, and also check to see if the people are at the bus stop. 
-            for(int buddy = 0 ; buddy < out.size(); buddy++) {
-                Edge e = (Edge)(out.get(buddy));
-                Double2D him = people.yard.getObjectLocation(e.getOtherNode(this));
-                forceVector.setTo((him.x - me.x), (him.y - me.y));   
+            //tells them to stay at work.  until they get on a bus. We dont want them walking home. 
+            if (goal == myHome){
+            Double2D him = people.yard.getObjectLocation(myWork);
+            forceVector.setTo ((him.x - me.x), (him.y - me.y));
+            //people get on the bus when appropriate
                 if ( !atStop && forceVector.length() <5){
-                    busstops bs = (busstops)e.getOtherNode(this);
-                    bs.mypeople.add(this);
-                    atStop = true;
+                busstops bs = (busstops)myWork;
+                bs.mypeople.add(this);
+                atStop = true;
                 }
-                else if (!atStop) {
-                    sumWill.addIn(forceVector.normalize());
-                }
+            sumWill.addIn(forceVector.normalize());
             }
-        } else {
+            //tells them to stay at home until they get on a bus. We dont want them walking to work. 
+            else if (goal ==myWork){
+                Double2D him = people.yard.getObjectLocation(myHome);           
+                forceVector.setTo ((him.x - me.x), (him.y - me.y));
+                //people get on the bus when appropriate
+                if ( !atStop && forceVector.length() <5){
+                busstops bs = (busstops)myHome;
+                bs.mypeople.add(this);
+                atStop = true;
+                }
+            sumWill.addIn(forceVector.normalize());
+           }
+        }
+   
+
+        //makes them follow the bus
+        else {
                  Double2D him = people.yard.getObjectLocation(mybus);
                  forceVector.setTo((him.x - me.x), (him.y - me.y)); 
                  sumWill.addIn(forceVector.normalize());
   
         }
-        
-            
-        // We will walk around randomly
-        sumWill.addIn(new Double2D(person.randomMultiplier * (person.random.nextDouble() * 1.0 - 0.5),
-        person.randomMultiplier * (person.random.nextDouble() * 1.0 - 0.5)));        
         sumWill.addIn(me);
         people.yard.setObjectLocation(this, new Double2D(sumWill));
        
