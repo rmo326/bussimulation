@@ -1,19 +1,17 @@
-package sim.app.bussimulation;
-import java.util.Scanner;
+/*package sim.app.bussimulation;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 import sim.util.*;
 public class BusRoute{
 File Route = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/Route.txt");
-public Bag myRoute = new Bag();
+public ArrayList<busstops> myRoute = new ArrayList<busstops>();
 public BusRoute(){
+    Scanner sc = new Scanner(Route);
      try{
-        Scanner sc = new Scanner(Route);
         while(sc.hasNextLine()){
-            String line = sc.nextLine();
-            System.out.println(""+line);    
-            myRoute.add(line);
+            String line = sc.nextLine();               
+            //myRoute.add(line);
         }
         sc.close();
     }
@@ -22,4 +20,4 @@ public BusRoute(){
     }  
 }
    
-}
+}*/

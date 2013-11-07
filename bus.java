@@ -103,7 +103,7 @@ public class bus implements Steppable{
         } 
         
         //checks to see if the bus is close enough to the stop such that the people can get on it
-        if ( !BusatStop && driveVector.length() <.95){              
+        if ( !BusatStop && driveVector.length() <.99){              
             BusatStop = true;
             waittime = WAITTIME;
                         

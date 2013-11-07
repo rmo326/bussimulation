@@ -11,6 +11,7 @@ public class busstops implements Steppable{
     Double2D location;
     public Bag mypeople = new Bag();
     public Color stopColor;
+    
     public busstops (Color c, Double2D loc){
         stopColor = c;
         location = loc;               
