@@ -22,10 +22,11 @@ public class people extends SimState{
     public int numpersons = 50;
     public int numpersonsB = 12;
     public int numpersonsC = 50;
-    public int numbusstops = 5;
-    public int numbus= 1;
+    public int numbus= 2;
     public Bag persons;
+    public Bag busrouteList;
     public Scanner stopReader;
+    public Scanner routeReader;
     public people(long seed){
         super(seed);
     }
@@ -65,25 +66,10 @@ public class people extends SimState{
         }
         catch(FileNotFoundException e){
         e.printStackTrace();
-        }
-            
-        
-        
-        
-        
-        
-        
-        //add some bus stops. because of the constructor for bus stops, we can pass colors in
-        /*for(int i = 0; i < numbusstops; i++){        
-            Double2D x =  new Double2D(people.yard.getWidth()-(i*50)-25,people.yard.getHeight()-(i*50)-25);  
-            busstops b = new busstops(bcolors.get(i), x);
-            people.yard.setObjectLocation(b,x);           
-            schedule.scheduleRepeating(b);
-            Buslist.addNode(b);
-            }     */
+        }                                
         Bag stops = Buslist.getAllNodes();
         
-        //place people
+       //place people
          for(int i = 0; i < numpersons; i++){
             personsA p = new personsA();
             people.yard.setObjectLocation(p,
@@ -124,19 +110,33 @@ public class people extends SimState{
             Whichstop.addEdge(f, ba, new Double(walktostop));
             }
             
-        /*//add a bus route
-         for (int ib = 0; ib < numbus; ib++){
-             BusRoute br = new BusRoute();
-         }*/
+        //add the bus routes
+        busrouteList = new Bag();
+        try{
+            File routeList = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/Route.txt");
+            routeReader = new Scanner(routeList);
+            while(routeReader.hasNext()){
+                Integer count = routeReader.nextInt();
+                ArrayList<busstops> routeHolder = new ArrayList<busstops>();
+                for(int k=0; k<count;k++){
+                    Integer x = routeReader.nextInt();
+                    routeHolder.add((busstops)stops.get(x));
+                }           
+                BusRoute<busstops> br = new BusRoute<busstops>(routeHolder); 
+                busrouteList.add(br);                     
+            }
+        }
+        catch(FileNotFoundException e){
+        e.printStackTrace();
+        }                               
          
         //add a bus
          for(int i = 0; i < numbus; i++){            
-            bus q = new bus();
-            q.addStop((busstops) stops.get(0));
-            q.addStop((busstops) stops.get(1));
-            q.addStop((busstops) stops.get(2));
-            q.addStop((busstops) stops.get(3));
-            q.addStop((busstops) stops.get(4));
+            bus q = new bus(((BusRoute<busstops>)busrouteList.get(i)).iterator());
+            for(int p = 0; p< stops.size(); p ++){
+                q.addStop((busstops) stops.get(p));
+            }
+
             people.yard.setObjectLocation(q,
             new Double2D(people.yard.getWidth()-75,people.yard.getHeight()-50));
             schedule.scheduleRepeating(q);

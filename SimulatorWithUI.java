@@ -42,9 +42,9 @@ public class SimulatorWithUI extends GUIState{
         people p = (people) state;
         peoplePortrayal.setField(people.yard);
         
-        //peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(Color.gray,3));
+
         
-        peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(3){
+        peoplePortrayal.setPortrayalForClass(bus.class, new sim.portrayal.simple.OvalPortrayal2D(5){
             public void draw (Object object, Graphics2D graphics, DrawInfo2D info){
                 bus ba = (bus)object;               
                 ba.setbusColor((new Color((ba.getcurrentLoad()), 0, 255 - (ba.getcurrentLoad()))));              
@@ -54,17 +54,21 @@ public class SimulatorWithUI extends GUIState{
             
         }
                 );
-        
-        peoplePortrayal.setPortrayalForClass(busstops.class, new sim.portrayal.simple.RectanglePortrayal2D
-        (new Color(50,60,70,100),5));
+         peoplePortrayal.setPortrayalForClass(busstops.class, new sim.portrayal.simple.RectanglePortrayal2D(8){
+            public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
+                busstops ba = (busstops)object;        
+                paint = ba.getColor();
+                super.draw(object, graphics, info);
+            }
+         });
+
         peoplePortrayal.setPortrayalForClass(personsA.class, new OvalPortrayal2D(){
              public void draw(Object object, Graphics2D graphics, DrawInfo2D info){
                 personsA pa = (personsA)object;        
                 paint = pa.getPersonColor();
                 super.draw(object, graphics, info);
             }       
-        }
-            );
+        });
         stopsPortrayal.setPortrayalForAll(new SimpleEdgePortrayal2D());
         stopsPortrayal.setField( new SpatialNetwork2D(people.yard, p.Whichstop));
         // reschedule the displayer

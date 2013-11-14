@@ -21,20 +21,19 @@ public class bus implements Steppable{
     public boolean stopbus = false;
     public boolean BusatStop = false;
     public int busInfo;
- 
+    public RouteIterator<busstops> busRoute;
+    public busstops whereAmI;
+    public busstops whereWasI;
     
-    public bus (){
-        
-        //mylocations.add(new Double2D(25,75));
-        //mylocations.add(new Double2D(75,75));
-        //mylocations.add(new Double2D(75,25));
-        //mylocations.add(new Double2D(25,25));       
+    public bus (RouteIterator<busstops> busRoute){
+
         busColor = Color.gray;
         waittime = 0;
         currentLoad = 1;
         busLoad = 1;
         busInfo = 10000;
-        
+        this.busRoute= busRoute;
+        whereAmI = busRoute.next();
     }
     
     public void addStop(busstops bs){
@@ -82,7 +81,9 @@ public class bus implements Steppable{
         Double2D me = people.yard.getObjectLocation(this);
         MutableDouble2D sumDrive = new MutableDouble2D();
         MutableDouble2D driveVector = new MutableDouble2D();
-        Double2D goal = ((busstops) mylocations.get(current)).getLocation();
+        Double2D goal = whereAmI.getLocation();
+//        Double2D goal = ((busstops) mylocations.get(current)).getLocation();
+        
         if (waittime == 0) {
             //pretty sure that the problem is the bus cant get away from the first goal fast enough-it gets caught back in
             //to alleviate this, we made the distance to the goal have to be less than .1 for it to catch us in the goal
@@ -107,7 +108,7 @@ public class bus implements Steppable{
             BusatStop = true;
             waittime = WAITTIME;
                         
-            busstops bst = (busstops) mylocations.get(current);
+            busstops bst = whereAmI;
 
             //drops people off 
             for(int i =0;i<myriders.size();i++){
@@ -127,16 +128,18 @@ public class bus implements Steppable{
                 peep.setStop(false);
                 myriders.add(peep);            
             }
-            current++;
-            current %= mylocations.size();
+            whereWasI = whereAmI;
+            whereAmI = busRoute.next();
+//            current++;
+//            current %= mylocations.size();
         }  
         if (BusatStop && driveVector.length() <.95){
             
-            int s =current-1;
-            setbusInfo(s);
-            if (current == 0 ){
-                setbusInfo(mylocations.size()-1);
-            }
+//            int s =current-1;
+//            setbusInfo(s);
+//            if (current == 0 ){
+//                setbusInfo(mylocations.size()-1);
+//            }
         }
         /*if (waittime >0){
             //for(int z=0;z<1;z++){ 
