@@ -15,6 +15,7 @@ public class RouteIterator<E> implements Iterator<E>{
     }
     
     public E next() {
+        
         E b = br.getStop(where);
         where += 1;
         where %= br.size();

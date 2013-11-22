@@ -90,7 +90,7 @@ public class personsA implements Steppable{
             Double2D him = people.yard.getObjectLocation(myWork);
             forceVector.setTo ((him.x - me.x), (him.y - me.y));
             //people get on the bus when appropriate
-                if ( !atStop && forceVector.length() <5){
+                if ( !atStop && forceVector.length() <5 ){
                 busstops bs = (busstops)myWork;
                 bs.mypeople.add(this);
                 atStop = true;

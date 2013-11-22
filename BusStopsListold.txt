@@ -1,0 +1,5 @@
+50 50 blue alpha
+75 75 red beta
+32 97 yellow gamma
+129 31 purple delta 
+90 2 orange epsilon

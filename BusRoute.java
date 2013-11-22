@@ -6,11 +6,20 @@ import sim.util.*;
 public class BusRoute<E> implements Iterable{
     File Route = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/Route.txt");
     public ArrayList<E> myRoute;
-
+    public String myName;
+    
     public BusRoute(ArrayList<E> routeFound){
         myRoute = routeFound;
+        myName = "Highland";
     }
-
+    public void setName(String name){
+        myName = name;
+    }
+    
+    public String getName (){
+        return myName;
+    }
+    
     public E getStop(int i) {
         return myRoute.get(i);
     }

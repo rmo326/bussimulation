@@ -15,7 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Field;
 public class people extends SimState{
-    public static Continuous2D yard = new Continuous2D(1.0,500,500);
+    public static Continuous2D yard = new Continuous2D(1.0,800,800);
     double randomMultiplier = 0.1;
     public Network Whichstop = new Network(false);
     public Network Buslist = new Network(false);
@@ -27,6 +27,8 @@ public class people extends SimState{
     public Bag busrouteList;
     public Scanner stopReader;
     public Scanner routeReader;
+    public Bag myNameList;
+    public String routeName;
     public people(long seed){
         super(seed);
     }
@@ -38,8 +40,8 @@ public class people extends SimState{
         Whichstop.clear();
         //add some people to the yard
         Buslist.clear();
-     
         
+
         //Lets Make Some bus stops
         try{
             File stopList = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/BusStopsList.txt");
@@ -47,17 +49,19 @@ public class people extends SimState{
             while(stopReader.hasNext()){
                 int x = stopReader.nextInt();
                 int y = stopReader.nextInt();
-                String myColor = stopReader.next();
+                int rgb1 = stopReader.nextInt();
+                int rgb2 = stopReader.nextInt();
+                int rgb3 = stopReader.nextInt();
                 String myName = stopReader.next();
                 Double2D q = new Double2D(x,y);
-                Color color;
-                try {
+                Color color = new Color(rgb1,rgb2,rgb3);
+                /*try {
                     Field field = Color.class.getField(myColor);
                     color = (Color)field.get(null);
                 }
                 catch(Exception e){
                     color = Color.gray;
-                }
+                }*/
                 busstops b = new busstops(color,q);
                 
                 people.yard.setObjectLocation(b,q);
@@ -71,6 +75,7 @@ public class people extends SimState{
         
        //place people
          for(int i = 0; i < numpersons; i++){
+            
             personsA p = new personsA();
             people.yard.setObjectLocation(p,
             new Double2D(people.yard.getWidth()*random.nextDouble(),
@@ -80,6 +85,7 @@ public class people extends SimState{
             }  
             
         persons = Whichstop.getAllNodes();
+        //below also sets which bus they want to take
         //should make each person friends with one bus stop. We are making them friends with that bus stop in an organized fashion-should make it easier to put them in a bag at an appropriate time.
         for(int q=0;q<(numpersonsB);q++){ 
             Object a = persons.get(q);
@@ -116,6 +122,7 @@ public class people extends SimState{
             File routeList = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/Route.txt");
             routeReader = new Scanner(routeList);
             while(routeReader.hasNext()){
+                Integer myNumericName = routeReader.nextInt();
                 Integer count = routeReader.nextInt();
                 ArrayList<busstops> routeHolder = new ArrayList<busstops>();
                 for(int k=0; k<count;k++){
@@ -123,7 +130,15 @@ public class people extends SimState{
                     routeHolder.add((busstops)stops.get(x));
                 }           
                 BusRoute<busstops> br = new BusRoute<busstops>(routeHolder); 
-                busrouteList.add(br);                     
+                busrouteList.add(br);
+                
+                if (myNumericName==0){
+                    String routeName = "Shreveport";
+                }
+                else if (myNumericName == 1){
+                    String routeName= "Bossier";
+                }
+                br.setName(routeName);                  
             }
         }
         catch(FileNotFoundException e){
@@ -131,8 +146,9 @@ public class people extends SimState{
         }                               
          
         //add a bus
-         for(int i = 0; i < numbus; i++){            
-            bus q = new bus(((BusRoute<busstops>)busrouteList.get(i)).iterator());
+         for(int i = 0; i < numbus; i++){
+            BusRoute mybr = (BusRoute)busrouteList.get(i);            
+            bus q = new bus((mybr.getName()),((BusRoute<busstops>)busrouteList.get(i)).iterator());
             for(int p = 0; p< stops.size(); p ++){
                 q.addStop((busstops) stops.get(p));
             }

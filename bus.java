@@ -21,12 +21,13 @@ public class bus implements Steppable{
     public boolean stopbus = false;
     public boolean BusatStop = false;
     public int busInfo;
+    public String busName;
     public RouteIterator<busstops> busRoute;
     public busstops whereAmI;
     public busstops whereWasI;
     
-    public bus (RouteIterator<busstops> busRoute){
-
+    public bus (String name, RouteIterator<busstops> busRoute){
+        busName = name;
         busColor = Color.gray;
         waittime = 0;
         currentLoad = 1;
@@ -34,6 +35,10 @@ public class bus implements Steppable{
         busInfo = 10000;
         this.busRoute= busRoute;
         whereAmI = busRoute.next();
+    }
+    
+    public String getbusName() {
+        return busName;
     }
     
     public void addStop(busstops bs){
