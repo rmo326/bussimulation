@@ -24,13 +24,20 @@ public class people extends SimState{
     public int numpersonsC = 50;
     public int numbus= 2;
     public Bag persons;
-    public Bag busrouteList;
+    public Bag busrouteList = new Bag();
     public Scanner stopReader;
     public Scanner routeReader;
     public Bag myNameList;
     public String routeName;
+    public Bag routeList;
+ 
     public people(long seed){
         super(seed);
+        //Bag routeList = new Bag();
+        //routeList = busrouteList;
+    }
+    public Bag getBag(){
+        return routeList;
     }
     public void start(){
         super.start();
@@ -55,13 +62,6 @@ public class people extends SimState{
                 String myName = stopReader.next();
                 Double2D q = new Double2D(x,y);
                 Color color = new Color(rgb1,rgb2,rgb3);
-                /*try {
-                    Field field = Color.class.getField(myColor);
-                    color = (Color)field.get(null);
-                }
-                catch(Exception e){
-                    color = Color.gray;
-                }*/
                 busstops b = new busstops(color,q);
                 
                 people.yard.setObjectLocation(b,q);
@@ -87,11 +87,18 @@ public class people extends SimState{
         persons = Whichstop.getAllNodes();
         //below also sets which bus they want to take
         //should make each person friends with one bus stop. We are making them friends with that bus stop in an organized fashion-should make it easier to put them in a bag at an appropriate time.
-        for(int q=0;q<(numpersonsB);q++){ 
+        for (int q=0; q<numpersons; q++){
             Object a = persons.get(q);
             int bw = 0; 
-            Object b = stops.get(bw);
-            Object bq = stops.get(bw+1);
+            int workplace =(int)(Math.random()*(stops.size()));
+            int homeplace = (int)(Math.random()*(stops.size()));
+            if (homeplace == workplace) {
+                workplace++;
+            }
+            Object b = stops.get(homeplace);
+           
+            Object bq = stops.get(workplace);
+            
             busstops bs = (busstops)b;
             personsA pa = (personsA)a;
             pa.setPersonColor(bs.getColor());
@@ -100,24 +107,10 @@ public class people extends SimState{
             double walktostop = 1;
             Whichstop.addEdge(a, b, new Double(walktostop));
             
-            }
-            
-         for(int z=12;z<(numpersonsC);z++){ 
-            Object f = persons.get(z);
-            int bz = 1; 
-            Object ba = stops.get(bz);
-            Object bb = stops.get(bz-1);
-            busstops bst = (busstops)ba;
-            personsA pas= (personsA)f;
-            pas.setPersonColor(bst.getColor());
-            pas.setWork((busstops)bb);
-            pas.setHome((busstops)ba);
-            double walktostop = 1;
-            Whichstop.addEdge(f, ba, new Double(walktostop));
-            }
-            
+        }
+  
         //add the bus routes
-        busrouteList = new Bag();
+        
         try{
             File routeList = new File("/home/mathlab/Mason/mason/sim/app/bussimulation/Route.txt");
             routeReader = new Scanner(routeList);
@@ -130,7 +123,7 @@ public class people extends SimState{
                     routeHolder.add((busstops)stops.get(x));
                 }           
                 BusRoute<busstops> br = new BusRoute<busstops>(routeHolder); 
-                busrouteList.add(br);
+
                 
                 if (myNumericName==0){
                     String routeName = "Shreveport";
@@ -138,7 +131,8 @@ public class people extends SimState{
                 else if (myNumericName == 1){
                     String routeName= "Bossier";
                 }
-                br.setName(routeName);                  
+                br.setName(routeName);
+                busrouteList.add(br);                  
             }
         }
         catch(FileNotFoundException e){

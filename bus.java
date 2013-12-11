@@ -127,46 +127,35 @@ public class bus implements Steppable{
             }
             
             //picks people up
-            while (myriders.size() < capacity && bst.mypeople.size() > 0) {
-                personsA peep = (personsA)((bst).mypeople.remove(0));
-                peep.onBus(this);
-                peep.setStop(false);
-                myriders.add(peep);            
+            for(int z=0; z<((bst).mypeople.size()); z++){
+                personsA peop = (personsA)((bst.mypeople.get(z)));
+                
+                while (myriders.size() < capacity && bst.mypeople.size() > 0 ) {
+                    //write as a for loop
+                    if (peop.geton(busRoute)){
+                    personsA peep = (personsA)((bst).mypeople.remove(0));
+                    peep.onBus(this);
+                    //peep.setStop(false);
+                    myriders.add(peep);  
+                    }          
+                }
             }
             whereWasI = whereAmI;
             whereAmI = busRoute.next();
-//            current++;
-//            current %= mylocations.size();
+
         }  
+    
         if (BusatStop && driveVector.length() <.95){
             
-//            int s =current-1;
-//            setbusInfo(s);
-//            if (current == 0 ){
-//                setbusInfo(mylocations.size()-1);
-//            }
+
         }
-        /*if (waittime >0){
-            //for(int z=0;z<1;z++){ 
-            Bag vals = new Bag(Buslist.getEdgesIn(0));                  
-                for(int y=0;y<(vals.size());y++){
-                    Edge e = (Edge)(vals.get(y));
-                    myriders.add(e.getOtherNode(this));
-                }
-            //}
-        }*/
+
         
         
         sumDrive.addIn(me);
             
         people.yard.setObjectLocation(this, new Double2D(sumDrive));
-        System.out.println ("where?" +busInfo);
-        System.out.println("waittime = " + waittime);
-        System.out.println("BusAtStop = " + BusatStop);
-        System.out.println("driveVector = " + driveVector.length());       
-        System.out.println("goalx = " + goal.x);
-        System.out.println("goaly = " + goal.y);
-        System.out.println("current = " + current);
+
         
     }
 }

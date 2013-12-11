@@ -25,5 +25,8 @@ public class RouteIterator<E> implements Iterator<E>{
     public void remove(){
     
     }
+    public boolean onRoute(E b){
+        return br.hasstop(b);   
+    }
 }
     

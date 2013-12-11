@@ -15,9 +15,11 @@ public class personsA implements Steppable{
     public Color myColor;
     public Color originalcolor;
     public boolean atStop = false;
+    public Boolean rightBus = false;
     public busstops myWork;
     public busstops myHome;
-    public busstops goal;  
+    public busstops goal; 
+    public busstops whereTo;
     public personsA() {
         myColor = Color.blue;
     }
@@ -71,8 +73,33 @@ public class personsA implements Steppable{
             return false;
         }
     }
+     
+    public boolean geton (RouteIterator<busstops> busRoute){
+       
+       return busRoute.onRoute(goal);
+       
+       /* while(busRoute.hasNext()){
+            whereTo = busRoute.next();
+            
+            if (whereTo == goal){
+                rightBus = true;
+            }
+            else{
+                rightBus = false;
+            }
+            if(rightBus == true){
+                break;
+            }
+        }
+        if (rightBus == true){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }   
     public void setStop (boolean d){
-        atStop=d;
+        atStop=d;*/
     }
     
     public void step(SimState state){

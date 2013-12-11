@@ -27,6 +27,9 @@ public class BusRoute<E> implements Iterable{
     public int size() {
         return myRoute.size();
     }
+    public boolean hasstop(E b){
+        return myRoute.contains(b);
+    }
 
     public RouteIterator<E> iterator (){
         return new RouteIterator<E>(this);
